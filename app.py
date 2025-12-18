@@ -20,7 +20,18 @@ if uploaded_file is not None:
         with st.spinner('Uploading to AWS...'):
             # 1. Connect to S3
             # (Streamlit uses your local AWS credentials automatically)
-            s3 = boto3.client('s3', region_name=REGION)
+            # Check if running locally or in cloud to get creds
+            if "aws" in st.secrets:
+                # We are on Streamlit Cloud
+                s3 = boto3.client(
+                    's3',
+                    aws_access_key_id=st.secrets["aws"]["access_key"],
+                    aws_secret_access_key=st.secrets["aws"]["secret_key"],
+                    region_name=REGION
+                )
+            else:
+                # We are on localhost (uses your local ~/.aws/credentials)
+                s3 = boto3.client('s3', region_name=REGION)
             
             # 2. Upload file
             file_key = f"input/{uploaded_file.name}"
@@ -28,4 +39,5 @@ if uploaded_file is not None:
                 s3.upload_fileobj(uploaded_file, BUCKET_NAME, file_key)
                 st.success(f"✅ Upload successful! Check your email in 1 minute.")
             except Exception as e:
+
                 st.error(f"Error: {e}")
