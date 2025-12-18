@@ -3,7 +3,7 @@ import boto3
 import os
 
 # --- CONFIGURATION ---
-BUCKET_NAME = "smart-doc-processor-yourname-2025" # <--- YOUR BUCKET NAME
+BUCKET_NAME = "smart-doc-processor-harshal-2025" # <--- YOUR BUCKET NAME
 REGION = "ap-south-1" # <--- YOUR REGION
 # ---------------------
 
@@ -41,3 +41,4 @@ if uploaded_file is not None:
             except Exception as e:
 
                 st.error(f"Error: {e}")
+
